@@ -145,3 +145,19 @@ Tone:音色の設定
 音色を追加したい場合はSound/Tone/ToneConfig.iniを開き、
 Tone_Name:をいじってください。
 複数設定してい場合は「/」を間に入れてください。
+
+
+//スコアデータ/////////////////////////////////////////////////////////////////////////////////////////////////////////
+拡張子.Stja
+Pass_ID:バナパスID (int)
+Course:難易度 (Easy,Normal,Hard,Oni,Edit)
+Played:プレイ回数 (int)
+ScoreRank:スコアランク (0:無印 1:白粋 2:銅粋 3:銀粋 4:金雅 5:桜雅 6:紫雅 7:極)
+HiScore:ハイスコア (int)
+Great:良の数
+Good:可の数
+Bad:不可の数
+Grades:成績 (0:無し 1:銀冠 2:金冠 3:虹冠)
+RepeatedHits:連打数 (int)
+Combo:最大コンボ数 (int)
+Hits:叩けた数 (int)
