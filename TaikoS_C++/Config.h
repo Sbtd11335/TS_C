@@ -844,6 +844,8 @@ int SelectSong_Donchan_1P_Count = 0;
 double SelectSong_Donchan_1P_Count_d = 0.0;
 double SelectSong_Donchan_1P_Count_d2 = 0.0;
 
+bool SelectSong_SelectDifficult_StartSong_Check;
+
 
 bool SelectSong_Genre_Bar_Scrolling = FALSE;
 bool SelectSong_Genre_Bar_Left_Scrolling = FALSE;
@@ -1349,7 +1351,7 @@ string Play_Display_2P_Course_ScoreRank_Str;//â§ä•êîï\é¶óp
 
 int Play_Display_Course_ScoreRank_Length;//ï∂éöêî
 
-bool Song_Dicided_Check[2];
+bool Song_Decided_Check[2];
 
 bool Option_Voice_Check[2];
 
