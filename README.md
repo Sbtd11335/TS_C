@@ -36,6 +36,7 @@ FPS:FPS値を設定できます。垂直同期が無効になっている時はW
 //Game
 Coins_Plus:EntryでCキーを押したときに増えるコインの枚数。特に意味ないです。 (int)
 Play_Songs:1クレジット当たりにプレイできる曲数。 (int)
+Hints:表示するヒントの数。 (int)
 
 //File
 Texture:テクスチャファイルの設定。初期値:Texture/ (str)
