@@ -37,6 +37,10 @@ FPS:FPS値を設定できます。垂直同期が無効になっている時はW
 Coins_Plus:EntryでCキーを押したときに増えるコインの枚数。特に意味ないです。 (int)
 Play_Songs:1クレジット当たりにプレイできる曲数。 (int)
 Hints:表示するヒントの数。 (int)
+PlaySong_Lane_ALPHA:レーンの透明度 (double)
+PlaySong_DonChan_ALPHA:どんちゃんの透明度 (double)
+PlaySong_DrawBackGround:背景を描写するか (FALSE,TRUE)(未実装)
+PlaySong_BARLINEOFF_Visualization:#BARLINEOFFで指定されている小節を表示させるか (FALSE,TRUE)
 
 //File
 Texture:テクスチャファイルの設定。初期値:Texture/ (str)
@@ -77,6 +81,7 @@ _Enso_Chara_Surprised:(int)
 
 //軽量化設定
 Sound_Load_Memory_All:TRUE選曲時に流す曲を全てメモリに読み込みます。全て読み込ませるとメモリ使用量が増える一方、デモ曲を流す時にラグは発生しません。 (FALSE,TRUE)
+Texture_Load_Chara_DonChan_All:演奏時にEnso/Chara/にある画像を全て読み込むか。全て読み込ませるとメモリ使用量が大幅に増えてしまうため非推奨。 (FALSE,TRUE)
 
 //キー設定
 KeySetting_1P:1P側のキー設定。 (0,1)
@@ -131,6 +136,10 @@ ScoreBoard
 Pass_Data/Skin/(バナパスID)/SelectSong/ScoreBoard.png
 として保存してください。
 
+称号画像の表示
+Pass_Data/Skin/(バナパスID)/Dan_Plate.png
+として保存してください。画像サイズ(79x33)
+
 //Option
 Speed:速さの設定。 (0:1.0 1:1.1 2:1.2 3:1.3 4:1.4 5:1.5 6:1.6 7:1.7 8:1.8 9:1.9 10:2.0 11:2.5 12:3.0 13:3.5 14:4.0)
 Disappear:ドロンの設定。 (FALSE,TRUE)
@@ -162,3 +171,52 @@ Grades:成績 (0:無し 1:銀冠 2:金冠 3:虹冠)
 RepeatedHits:連打数 (int)
 Combo:最大コンボ数 (int)
 Hits:叩けた数 (int)
+
+//譜面ファイルについて
+Ver0.4.0から譜面再生テストを行っております。一応必要な命令の読み込みは行えるようにはなっています。
+今後修正予定
+・OFFSETの値が0より大きい場合に正常に譜面を再生できるようにする。
+・#DREAY対応
+・#SCROLLが0より小さいときの挙動の対応
+
+現在使用可能な命令一覧
+#SCROLL (double , 0.001~) スクロール速度の変更。
+#BPMCHANGE (double , 0.001~) BPMの変更。
+#MEASURE (int/int) 拍子の変更。
+#BARLINEOFF 小節線を非表示にする。
+#BARLINEON 小節線を表示する。
+#N 普通譜面
+#E 玄人譜面
+#M 達人譜面
+
+現在使用不可
+#GOGOSTART ゴーゴータイムの開始
+#GOGOEND ゴーゴータイムの終了
+#SECTION 譜面分岐情報のリセット。
+#LEVELHOLD 分岐後の譜面のレベルを保つ。
+#DELAY (double) 指定された時間待機
+#BRANCHSTART (ID,double,double) 譜面分岐の開始
+#BRANCHEND 譜面分岐の終了
+
+譜面分岐条件の追加について
+譜面分岐を行う際の条件を追加しています。
+#BRANCHSTART (ID,double,double)
+ID:p,a,r,s,c,g,t,d,b
+p:精度(double%)(double%)
+a:精度(double%)(double%)
+r:連打数(int1)(int2)
+s:点数(int1)(int2)
+c:コンボ数(int1)(int2)
+g:ゲージの量(int1%)(int2%)
+t:良の数(int1)(int2)
+d:可の数(int1)(int2)
+b:不可の数(int1)(int2)
+
+pとaの違い
+pは#BRANCHSTARTで指定した小節線前の2つ前までの精度を基に分岐する設定となっていますが、
+aは#BRANCHSTARTで指定した小節線前の1つ前までの精度を基に分岐する設定となっています。
+これにより一小節目の精度も基に譜面分岐を行うことが可能です。
+
+
+
+
