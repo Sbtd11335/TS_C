@@ -84,8 +84,11 @@ Sound_Load_Memory_All:TRUE選曲時に流す曲を全てメモリに読み込み
 Texture_Load_Chara_DonChan_All:演奏時にEnso/Chara/にある画像を全て読み込むか。全て読み込ませるとメモリ使用量が大幅に増えてしまうため非推奨。 (FALSE,TRUE)
 
 //キー設定
-KeySetting_1P:1P側のキー設定。 (0,1)
-KeySetting_2P:2P側のキー設定。 (0)
+KeySetting_1P_~: (int,int)
+KeySetting_2P_~: (int,int)
+int...KeyCodeChecker.exeにより取得した値を入力してください。なお、キーは必ず2つ設定してください。じゃないとバグります。
+どうしても1つだけ設定したい場合は片方の設定を「-2」と書いたり、存在しないキーコードを入力してください。
+
 
 //開発者向け
 _White_Genre_Song_ID:デバッグモード。 (FALSE,TRUE)
@@ -149,7 +152,7 @@ Skip:演奏スキップの設定。 (FALSE,TRUE)
 Adjustment:音符位置調整の設定。 (FALSE,TRUE)
 Adjustment_Value:音符位置調整の値の設定。 (0:左5 1:左4 2:左3 3:左2 4:左1 5:中央 6:右1 7:右2 8:右3 9:右4 10:右5)
 Voice:ボイスの設定。 (FALSE,TRUE)
-Tone:音色の設定
+Tone:音色の設定 (int)
 
 //音色の設定
 音色を追加したい場合はSound/Tone/ToneConfig.iniを開き、
