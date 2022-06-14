@@ -44,6 +44,9 @@ PlaySong_Lane_ALPHA:レーンの透明度 (double)
 PlaySong_DonChan_ALPHA:どんちゃんの透明度 (double)
 PlaySong_DrawBackGround:背景を描写するか (FALSE,TRUE)(未実装)
 PlaySong_BARLINEOFF_Visualization:#BARLINEOFFで指定されている小節を表示させるか (FALSE,TRUE)
+PlaySong_PlayerInfomation_DrawFlug:良の数、可の数などの情報を表示させるか (FALSE,TRUE)
+_OFFSET:演奏時のオフセット設定。正の値だとノーツが左に移動し負の値だとノーツが右に移動した状態となります。(double)
+判定(±ms)~の説明は省きます。
 
 //File
 Texture:テクスチャファイルの設定。初期値:Texture/ (str)
@@ -52,7 +55,6 @@ TJA:譜面ファイルの設定。初期値:TJA/ (str)
 Pass_Data:バナパスデータの設定。初期値:Pass_Data/ (str)
 
 //Timer
-
 //GameTexture
 _CommonDonChan_Clear_In:(int)
 _CommonDonChan_Clear_Loop:(int)
@@ -101,7 +103,7 @@ _White_Genre_Song_ID:デバッグモード。 (FALSE,TRUE)
 //譜面ファイル追加命令
 SETDEMOSTARTSOUND:選曲時に流す曲の設定。 (str)
 Change_DisPlay_Course:選曲時に表と裏のスコア情報を入れ替えて表示させます。 (FALSE,TRUE)
-
+MAXSCORE:天井スコアの設定を行います。 (int)
 
 //Pass_Data設定方法////////////////////////////////////////////////////////////////////////////////////////////
 拡張子.Bdataで保存されています。
@@ -191,6 +193,8 @@ Ver0.4.0から譜面再生テストを行っております。一応必要な命
 #MEASURE (int/int) 拍子の変更。
 #BARLINEOFF 小節線を非表示にする。
 #BARLINEON 小節線を表示する。
+#SECTION 譜面分岐情報のリセット。
+#LEVELHOLD 分岐後の譜面のレベルを保つ。
 #N 普通譜面
 #E 玄人譜面
 #M 達人譜面
@@ -198,18 +202,13 @@ Ver0.4.0から譜面再生テストを行っております。一応必要な命
 現在使用不可
 #GOGOSTART ゴーゴータイムの開始
 #GOGOEND ゴーゴータイムの終了
-#SECTION 譜面分岐情報のリセット。
-#LEVELHOLD 分岐後の譜面のレベルを保つ。
 #DELAY (double) 指定された時間待機
-#BRANCHSTART (ID,double,double) 譜面分岐の開始
-#BRANCHEND 譜面分岐の終了
 
 譜面分岐条件の追加について
 譜面分岐を行う際の条件を追加しています。
 #BRANCHSTART (ID,double,double)
-ID:p,a,r,s,c,g,t,d,b
+ID:p,r,s,c,g,t,d,b
 p:精度(double%)(double%)
-a:精度(double%)(double%)
 r:連打数(int1)(int2)
 s:点数(int1)(int2)
 c:コンボ数(int1)(int2)
@@ -218,11 +217,69 @@ t:良の数(int1)(int2)
 d:可の数(int1)(int2)
 b:不可の数(int1)(int2)
 
-pとaの違い
-pは#BRANCHSTARTで指定した小節線前の2つ前までの精度を基に分岐する設定となっていますが、
-aは#BRANCHSTARTで指定した小節線前の1つ前までの精度を基に分岐する設定となっています。
-これにより一小節目の精度も基に譜面分岐を行うことが可能です。
 
 
 
+
+
+
+
+//重要
+譜面データ(.tjaの保存場所について)
+譜面データは、
+TJA/ジャンルファイル/譜面ファイル/譜面データ.tja
+として保存しないと読み込むことが出来ません、また保存の仕方が悪かったりするとソフトが起動しない場合がございます。
+
+譜面データテンプレート
+
+TITLE:タイトル
+BPM:テンポ
+OFFSET:オフセット
+WAVE:音源ファイル
+DEMOSTART:デモスタート
+
+COURSE:コース(0,1,2,3,4 / Easy,Normal,Hard,Oni,Edit)
+LEVEL:レベル(0~10)
+BALLOON:風船の連打数
+MAXSCORE:天井スコア(書かなくてもいい)
+#START
+~~~,
+#END
+となるように書いてください。
+LEVEL~MAXSCOREまでの文は必ずCOUESEと#STARTの間に書いてください。
+
+
+譜面分岐があるときは必ず#N,#E,#Mの記述を行い、#Mの終わりに#BRANCHENDを書いてください。
+また、従来の太鼓さん次郎とは違い分岐条件の全てが開始される2つ前の小節のデータの情報によって分岐されるため、
+百花繚乱など連打ノーツの次に分岐が開始されるときは一回小節線を挟ませるように譜面データ側で設定してください。
+例:
+(正常に譜面分岐が行われない記述)
+#MEASURE 5/4
+500008000000000000000000000000000000000000000000000000000000,
+#BARLINEON
+#BRANCHSTART r,1,2
+
+
+(正常に譜面分岐が行われる記述)
+#MEASURE 5/4
+#MEASURE 1/4
+#BARLINEOFF
+500008000000,
+#MEASURE 4/4
+000000000000000000000000000000000000000000000000,
+#MEASURE 5/4
+#BARLINEON
+#BRANCHSTART r,1,2
+
+もしくは、
+#MEASURE 5/4
+500008000000
+000000000000000000000000000000000000000000000000,
+#BARLINEON
+#BRANCHSTART r,1,2
+
+
+なお、譜面分岐は分岐が行われる小節線が隠れている状態でのみ行われます。(本家と同じ仕様)
+
+また、データ内に書かれているコメントアウト(//~~)などは消すことを推奨します。正常に動作しない場合がありますので。(修正を検討中)
 
